@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/index :: dynamic(~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cart</title>
+</head>
+<body>
+<main ng-controller="shopping-cart-ctrl">
+    <div class="container mt-4" th:fragment="shopping-cart">
+        <h2 class="text-center">🛒 Shopping Cart</h2>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Shopping Cart</h4>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in cart.items">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price | currency }}</td>
+                    <td>
+                        <input type="number" min="1" class="form-control" style="width: 80px;"
+                               ng-model="item.qty" ng-change="cart.updateQuantity(item.id, item.qty)">
+                    </td>
+                    <td>{{ cart.amt_of(item) | currency }}</td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="cart.remove(item.id)">❌</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- Tổng tiền & Hành động -->
+            <div class="panel-footer d-flex justify-content-between align-items-center">
+                <h5>Total: {{ cart.amount | currency }}</h5>
+                <div>
+                    <button ng-click="cart.clear()" class="btn btn-danger me-2">
+                        🗑️ Clear
+                    </button>
+                    <a th:href="@{/orders/checkout}" class="btn btn-success">
+                        ✅ Checkout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

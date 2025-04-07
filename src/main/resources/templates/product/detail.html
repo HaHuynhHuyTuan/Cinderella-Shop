@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/index :: dynamic(~{::main})}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<body ng-app="shopping-cart-app" ng-controller="shopping-cart-ctrl">
+<main th:object="${item}">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card text-black">
+                <img th:src="@{'/images/' + *{image}}" class="card-img-top" alt="Product Image"
+                     onerror="this.onerror=null; this.src='/images/default.png';">
+                <div class="card-body">
+                    <div class="text-center mt-1">
+                        <h4 class="card-title" th:text="*{name}"></h4>
+                        <h6 class="text-primary mb-1 pb-3">Giá: <span th:text="*{price}"></span> VNĐ</h6>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="text-muted">Ngày tạo: <span th:text="*{createDate}"></span></p>
+                        <p class="text-secondary">Danh mục: <span th:text="*{category.name}"></span></p>
+                    </div>
+
+                    <div class="d-flex flex-row">
+                        <button class="btn btn-danger flex-fill ms-1"
+                                ng-click="cart.add($event)"
+                                th:attr="data-id=*{id}, data-name=*{name}, data-price=*{price}, data-image=*{image}">
+                            <i class="bi bi-cart"></i> Mua ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <h4 class="text-center text-uppercase fw-bold mb-3">Sản phẩm cùng loại</h4>
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+            <div class="col" th:each="p : *{category.products}">
+                <div class="card h-100 shadow-sm">
+                    <a th:href="@{/product/detail/{id}(id=${p.id})}" class="text-decoration-none">
+                        <img th:src="@{'/images/' + ${p.image}}" class="card-img-top"
+                             alt="Product Image"
+                             onerror="this.onerror=null; this.src='/images/default.png';">
+                        <div class="card-body text-center">
+                            <h6 class="card-title text-dark" th:text="${p.name}"></h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

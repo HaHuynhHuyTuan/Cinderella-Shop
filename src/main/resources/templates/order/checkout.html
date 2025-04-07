@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/index :: dynamic(~{::main})}">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+</head>
+<body>
+<main>
+  <div class="container py-4" ng-controller="shopping-cart-ctrl">
+    <h3 class="mb-4">🚚 Thanh toán</h3>
+
+    <!-- Form thanh toán -->
+    <form name="checkoutForm" ng-submit="cart.checkout()" novalidate>
+      <div class="mb-3">
+        <label for="shippingAddress" class="form-label">Địa chỉ giao hàng:</label>
+        <input type="text" id="shippingAddress" class="form-control"
+               ng-model="cart.shippingAddress" required placeholder="Nhập địa chỉ giao hàng">
+        <div class="text-danger mt-1" ng-show="checkoutForm.shippingAddress.$touched && checkoutForm.shippingAddress.$invalid">
+          Vui lòng nhập địa chỉ giao hàng.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary"
+              ng-disabled="checkoutForm.$invalid || cart.items.length === 0">
+        Đặt hàng
+      </button>
+    </form>
+
+    <!-- Danh sách sản phẩm -->
+    <div class="mt-5">
+      <h5>🛒 Sản phẩm trong giỏ:</h5>
+      <ul class="list-group" ng-if="cart.items.length > 0">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            ng-repeat="item in cart.items">
+          <div>
+            <strong>{{ item.name }}</strong><br>
+            SL: {{ item.qty }} × {{ item.price | currency }}
+          </div>
+          <span class="fw-bold text-end">{{ cart.amt_of(item) | currency }}</span>
+        </li>
+      </ul>
+      <div class="text-muted mt-3" ng-if="cart.items.length === 0">
+        Giỏ hàng của bạn đang trống.
+      </div>
+      <h5 class="mt-4" ng-if="cart.items.length > 0">Tổng tiền: <span class="text-success">{{ cart.amount | currency }}</span></h5>
+    </div>
+  </div>
+</main>
+</body>
+</html>

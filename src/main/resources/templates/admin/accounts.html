@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+
+  <!-- Tabs chuyển đổi giữa Account và Product -->
+  <ul class="nav nav-tabs" id="adminTabs">
+    <li class="nav-item">
+      <a class="nav-link active" id="account-tab" data-bs-toggle="tab" href="#account">Accounts</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="product-tab" data-bs-toggle="tab" href="#product">Products</a>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3">
+    <!-- Tab Account -->
+    <div class="tab-pane fade show active" id="account">
+      <h3>Quản lý Tài khoản</h3>
+
+      <!-- Form chỉnh sửa tài khoản -->
+      <form th:action="@{/admin/saveAccount}" method="post">
+        <input type="hidden" th:field="${account.username}">
+
+        <label>Email:</label>
+        <input type="email" th:field="${account.email}" class="form-control" required>
+
+        <label>Full Name:</label>
+        <input type="text" th:field="${account.fullname}" class="form-control" required>
+
+        <label>Password:</label>
+        <input type="password" th:field="${account.password}" class="form-control" required>
+
+        <label>Photo URL:</label>
+        <input type="text" th:field="${account.photo}" class="form-control">
+
+        <button type="submit" class="btn btn-success mt-2">Lưu</button>
+      </form>
+
+      <!-- Bảng danh sách tài khoản -->
+      <table class="table mt-3">
+        <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Full Name</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="account : ${accounts}">
+          <td th:text="${account.username}"></td>
+          <td th:text="${account.email}"></td>
+          <td th:text="${account.fullname}"></td>
+          <td>
+            <a th:href="@{/admin/editAccount(username=${account.username})}" class="btn btn-primary">Edit</a>
+            <a th:href="@{/admin/deleteAccount(username=${account.username})}" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab Product -->
+    <div class="tab-pane fade" id="product">
+      <h3>Quản lý Sản phẩm</h3>
+
+      <!-- Form chỉnh sửa sản phẩm -->
+      <form th:action="@{/admin/saveProduct}" method="post">
+        <input type="hidden" th:field="${product.id}">
+
+        <label>Tên sản phẩm:</label>
+        <input type="text" th:field="${product.name}" class="form-control" required>
+
+        <label>Giá:</label>
+        <input type="number" th:field="${product.price}" class="form-control" required>
+
+        <button type="submit" class="btn btn-success mt-2">Lưu</button>
+      </form>
+
+      <!-- Bảng danh sách sản phẩm -->
+      <table class="table mt-3">
+        <thead>
+        <tr>
+          <th>Mã sản phẩm</th>
+          <th>Tên sản phẩm</th>
+          <th>Giá</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+          <td th:text="${product.id}"></td>
+          <td th:text="${product.name}"></td>
+          <td th:text="${product.price}"></td>
+          <td>
+            <a th:href="@{/admin/editProduct(id=${product.id})}" class="btn btn-primary">Edit</a>
+            <a th:href="@{/admin/deleteProduct(id=${product.id})}" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

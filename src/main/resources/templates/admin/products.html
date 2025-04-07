@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{/layout/index :: dynamic(~{ :: main})}">
+<head>
+    <title>Admin Product</title>
+</head>
+<body>
+<main>
+    <!-- Form for adding/editing products -->
+    <h2>Add or Edit Product</h2>
+    <form th:action="@{/admin/products}" th:object="${product}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}">
+
+        <div>
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" th:field="*{name}" required class="form-control"/>
+        </div>
+        <div>
+            <label for="category">Category:</label>
+            <input type="text" id="category" th:field="*{category}" required class="form-control"/>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="number" id="price" th:field="*{price}" required class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Upload Image</label>
+            <input class="form-control" type="file" id="formFile" name="file">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+    <!-- Table to display products -->
+    <h2>Product List</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td>
+                <img th:src="@{'/uploads/' + ${product.image}}" width="80" height="80" class="img-thumbnail">
+            </td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.category}"></td>
+            <td th:text="${product.price}"></td>
+            <td>
+                <a th:href="@{/admin/products/edit/{id}(id=${product.id})}" class="btn btn-warning">Edit</a>
+                <a th:href="@{/admin/products/delete/{id}(id=${product.id})}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
